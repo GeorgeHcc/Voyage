@@ -25,7 +25,7 @@ export const DefaultLayout: React.FC<ILayoutProps> = ({ header, footer, content 
   return (
     <>
       <LayoutWrap >
-        <Header>{header}</Header>
+        <Header style={{height:"50px"}}>{header}</Header>
         <Content style={{ flex: 1 }}>{content}</Content>
         <Footer>{footer}</Footer>
       </LayoutWrap>

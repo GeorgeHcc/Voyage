@@ -1,13 +1,14 @@
-
-import { SpeakerLayout } from "./layout/speakerLayout";
-
+// import { SpeakerLayou } from "./layout/speakerLayout";
+// import { DefaultLayout } from "./layout/defaultLayout";
+import routes from "./router";
 import GlobalStyl from "./style/theme";
+import { useRoutes } from "react-router-dom";
 function App() {
   return (
     <>
       <GlobalStyl themes="light" />
 
-      <SpeakerLayout></SpeakerLayout>
+     {useRoutes(routes)}
     </>
   );
 }

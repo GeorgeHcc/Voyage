@@ -3,7 +3,12 @@ import { RouteObject } from "react-router-dom";
 
 const Login = lazy(() => import("../views/login"));
 const Friends = lazy(() => import("@/views/friends"));
+const Meeting=lazy(()=>import("@/views/meeting"))
 const routes: RouteObject[] = [
+  {
+    path:"/",
+    element:<Meeting/>
+  },
   {
     path: "/login",
     element: <Login />,
