@@ -1,5 +1,6 @@
 import React, { forwardRef, LegacyRef } from "react";
 import VideoWrap from "../style/videoStyl";
+import { Select } from "antd";
 export interface IVideoProps {
   width: string | number;
   height: string | number;
@@ -12,8 +13,9 @@ const Video = forwardRef((props: IVideoProps, ref: LegacyRef<HTMLVideoElement> |
   return (
     <VideoWrap {...otherProps} label={label}>
       <div className="video-mask">
-        <video ref={ref} {...otherProps}></video>
+    
       </div>
+      <video ref={ref} {...otherProps}></video>
     </VideoWrap>
   );
 });

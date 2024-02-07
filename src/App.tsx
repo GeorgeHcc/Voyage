@@ -8,7 +8,7 @@ function App() {
     <>
       <GlobalStyl themes="light" />
 
-     {useRoutes(routes)}
+      {useRoutes(routes)}
     </>
   );
 }

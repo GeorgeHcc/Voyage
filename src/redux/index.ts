@@ -1,22 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit"
-import roomReducer from "./modules/room"
-import { TypedUseSelectorHook, useSelector } from "react-redux"
+import { configureStore } from "@reduxjs/toolkit";
+import roomReducer from "./modules/room";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 
-// const peerConnetionState={
-//     "new":0,
-//     "connecting":1,
-//     "connected":2,
-//     "disconnected":3,
-//     "failed":4,
-//     "closed":5
-// }
+import peerConnetionReducer from "./modules/peerConnetion";
 
-const store=configureStore({
-    reducer:{roomReducer}
-})
+const store = configureStore({
+  reducer: { roomReducer, peerConnetionReducer },
+});
 
-type IRootState=ReturnType<typeof store.getState>
+type IRootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export const useAppSelector: TypedUseSelectorHook<IRootState> = useSelector;
 
-export const useAppSelector:TypedUseSelectorHook<IRootState>=useSelector
-
-export default store
+export default store;

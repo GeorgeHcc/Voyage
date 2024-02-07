@@ -1,7 +1,8 @@
 
 
 
-export const createLocalStream=async ()=>{
 
 
+export const usePeerConnection=()=>{
+    const pc=new RTCPeerConnection()
 }

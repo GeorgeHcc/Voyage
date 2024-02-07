@@ -4,7 +4,7 @@ import { IVideoProps } from "../component/video";
 // interface IVideoWrap extends IVideoProps{
 //     children:ReactNode
 // }
-import { debug } from "@/style/global";
+
 const VideoWrap = styled.div<IVideoProps>`
   position: relative;
   width: 100%;
@@ -13,24 +13,22 @@ const VideoWrap = styled.div<IVideoProps>`
   padding: 0;
 
   & .video-mask {
-    /* position: absolute; */
+    position: absolute;
+    z-index: 10;
     ${(props) => `width:${props.width}`}
     ${(props) => `height:${props.height}`}
-    background-color: transparent;
-    z-index: 10;
-    ${debug}
+    background-color: red;
+  }
 
-    & video {
-      ${debug}
-      position: absolute;
-      z-index: 1;
-      ${(props) => (props.reverse ? "transform:rotateY(180deg)" : "")}
-      ${(props) => `width:${props.width}`}
+  & video {
+    position: absolute;
+    z-index: -1;
+    ${(props) => (props.reverse ? "transform:rotateY(180deg)" : "")}
+    ${(props) => `width:${props.width}`}
       ${(props) => `height:${props.height}`}
-    }
+  }
 
-    & .msg-input {
-    }
+  & .msg-input {
   }
 `;
 
