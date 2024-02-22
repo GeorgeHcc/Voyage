@@ -1,9 +1,37 @@
-body {
+body,
+html {
   margin: 0;
   width: 100%;
   height: 100%;
+  box-sizing: border-box;
 }
-#root{
+#root {
   width: 100%;
   height: 100%;
+
+  user-select: none;
+
+  overflow: hidden;
+
+  /* 隐藏默认的滚动条 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+
+  /* 滚动条的轨道 */
+  ::-webkit-scrollbar-track {
+    background: #eeeeee;
+  }
+
+  /* 滚动条的滑块 */
+  ::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+    border-radius: 5px;
+  }
+
+  /* 鼠标悬停在滑块上时 */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a6a6a6;
+  }
 }

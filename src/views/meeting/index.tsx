@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { DefaultLayout } from "@/layout/defaultLayout";
 import Video from "./component/video";
 import BottomToolBar from "./component/bottomToolBar";
@@ -7,29 +7,43 @@ import { removeConnection, addPeerConnection } from "@/redux/modules/peerConneti
 import { useDispatch } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
 import { getLocalDevices } from "@/utils";
-
+import useP2PConnection from "@/hooks/useP2PConnection";
+import { message } from "antd";
 const Meeting: React.FC = () => {
-  const dispatch = useDispatch();
+  const videoRef = useRef(null);
 
-  const pcBucket = useAppSelector((state) => {
-    return state.peerConnetionReducer.peerConnectionBucket;
+  const { video, audio } = useAppSelector((state) => {
+    return state.accountReducer.meetingState;
   });
 
-  const pc = new RTCPeerConnection();
-
-  // useEffect(() => {
-  //   // @ts-ignore
-  //   dispatch(addPeerConnection({ userId: "1231", peerConnection: pc }));
-  //   return () => {
-  //     dispatch(removeConnection("1231"));
-  //   };
-  // });
+  console.log(video, audio);
+  const [messageApi, contextHolder] = message.useMessage();
+  const { devices } = useP2PConnection(
+    {
+      constraints: {
+        audio: audio,
+        video: video,
+      },
+      mountDom: videoRef,
+    },
+    (e) => {
+      messageApi.open({
+        type: "error",
+        content: `${e}`,
+      });
+    }
+  );
+  console.log(devices);
 
   return (
-    <DefaultLayout
-      footer={<BottomToolBar />}
-      content={<Video width={"100%"} height={"100%"}></Video>}
-    ></DefaultLayout>
+    <>
+      {contextHolder}
+      <DefaultLayout
+        header={<div style={{ height: "100%", backgroundColor: "white" }}>header</div>}
+        footer={<BottomToolBar />}
+        content={<Video width={"100%"} height={"100%"} ref={videoRef} reverse></Video>}
+      ></DefaultLayout>
+    </>
   );
 };
 

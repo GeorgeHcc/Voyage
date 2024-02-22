@@ -4,22 +4,25 @@ import { Button, Dropdown } from "antd";
 import type { MenuProps } from "antd";
 import { createFromIconfontCN, UpOutlined } from "@ant-design/icons";
 import { ItemType } from "antd/es/breadcrumb/Breadcrumb";
+import { useAppSelector } from "@/redux";
+import account, { IMeetingState, changeMeetingState } from "@/redux/modules/account";
+import { useDispatch } from "react-redux";
 
 const audioInputGroup = {
   key: "1",
-  type: "group", 
-  label: <span style={{ fontSize: "12px" }}>选择麦克风</span>,
+  type: "group",
+  label: <span style={{ fontSize: "12px", userSelect: "none" }}>选择麦克风</span>,
   children: [] as ItemType[],
 };
 const audioOutputGroup = {
   key: "2",
-  type: "group", 
-  label: <span style={{ fontSize: "12px" }}>选择扬声器</span>,
+  type: "group",
+  label: <span style={{ fontSize: "12px", userSelect: "none" }}>选择扬声器</span>,
   children: [] as ItemType[],
 };
 const videoInputGroup = {
   key: "1",
-  type: "group", 
+  type: "group",
   label: <span style={{ fontSize: "12px" }}>选择摄像头</span>,
   children: [] as ItemType[],
 };
@@ -33,14 +36,35 @@ const IconFont = createFromIconfontCN({
   },
 });
 
-const audioIconTypes = ["icon-audio-fill", "icon-icon-audio-off"];
-const videoIconTypes = ["icon-video", "icon-video-off"];
+const audioIconTypes = ["icon-icon-audio-off", "icon-audio-fill"];
+const videoIconTypes = ["icon-video-off", "icon-video"];
 
-const BottomToolBar: React.FC = () => {
-  const [isAudioOpen, setIsAudioOpen] = useState(0);
-  const [isVideoOpen, setIsVideoOpen] = useState(0);
+const BottomToolBar: React.FC = React.memo(() => {
+  const [isAudioOpen, setIsAudioOpen] = useState<0 | 1>(0);
+  const [isVideoOpen, setIsVideoOpen] = useState<0 | 1>(1);
   const [audioDevice, setAudioDevice] = useState<MenuProps["items"]>([]);
   const [videoDevice, setVideoDevice] = useState<MenuProps["items"]>([]);
+
+  const dispatch = useDispatch();
+
+  function changeMediaState(mediaType: "audio" | "video") {
+    switch (mediaType) {
+      case "audio":
+        setIsAudioOpen(isAudioOpen === 0 ? 1 : 0);
+        // queueMicrotask(()=>{
+        //   dispatch(changeMeetingState({ audio: Boolean(isAudioOpen), video: Boolean(isVideoOpen) }));
+        // })
+        break;
+      case "video":
+        setIsVideoOpen(isVideoOpen === 0 ? 1 : 0);
+
+        break;
+      default:
+    }
+    queueMicrotask(() => {
+      dispatch(changeMeetingState({ audio: Boolean(isAudioOpen), video: Boolean(isVideoOpen) }));
+    });
+  }
 
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
@@ -58,11 +82,10 @@ const BottomToolBar: React.FC = () => {
     });
   }, []);
 
- 
   return (
     <ToolBarWrap>
       <div className="item left">
-        <div className="switch" onClick={() => setIsAudioOpen(isAudioOpen === 0 ? 1 : 0)}>
+        <div className="switch" onClick={() => changeMediaState("audio")}>
           <IconFont type={audioIconTypes[isAudioOpen]} />
         </div>
         <Dropdown
@@ -77,11 +100,11 @@ const BottomToolBar: React.FC = () => {
       </div>
 
       <div className="item left">
-        <div className="switch" onClick={() => setIsVideoOpen(isVideoOpen === 0 ? 1 : 0)}>
+        <div className="switch" onClick={() => changeMediaState("video")}>
           <IconFont type={videoIconTypes[isVideoOpen]} style={{ fontSize: "24px" }} />
         </div>
         <Dropdown
-          menu={{ items: videoDevice, selectable: true }}
+          menu={{ items: videoDevice, selectable: true }}  
           trigger={["click"]}
           placement="top"
         >
@@ -100,7 +123,7 @@ const BottomToolBar: React.FC = () => {
       </div>
     </ToolBarWrap>
   );
-};
+});
 
 export default BottomToolBar;
 

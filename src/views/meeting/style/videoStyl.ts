@@ -15,17 +15,18 @@ const VideoWrap = styled.div<IVideoProps>`
   & .video-mask {
     position: absolute;
     z-index: 10;
-    ${(props) => `width:${props.width}`}
-    ${(props) => `height:${props.height}`}
-    background-color: red;
+    ${(props) => `width:${props.width};`}
+    ${(props) => `height:${props.height};`}
+    opacity:0
   }
 
   & video {
     position: absolute;
-    z-index: -1;
-    ${(props) => (props.reverse ? "transform:rotateY(180deg)" : "")}
-    ${(props) => `width:${props.width}`}
-      ${(props) => `height:${props.height}`}
+    z-index: 1;
+    ${(props) => (props.reverse ? "transform:rotateY(180deg);" : "")}
+    ${(props) => `width:${props.width};`}
+    ${(props) => `height:${props.height};`}
+    background-color:#1c1c1c;
   }
 
   & .msg-input {
