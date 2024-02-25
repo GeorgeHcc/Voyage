@@ -13,12 +13,13 @@ function App() {
           token: {
             colorPrimary: `${purple[4]}`,
             controlItemBgHover: purple[0],
+            colorBgSpotlight: `rgba(0, 0, 0, 0.75)`,
             // fontSize: 12,
             // borderRadius: 15,
           },
         }}
       >
-        <GlobalStyl themes="light" />
+        {/* <GlobalStyl themes="light" /> */}
 
         {useRoutes(routes)}
       </ConfigProvider>

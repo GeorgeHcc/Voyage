@@ -16,12 +16,13 @@ html {
   /* 隐藏默认的滚动条 */
   ::-webkit-scrollbar {
     width: 8px;
-    height: 10px;
+    height: 5px;
   }
 
   /* 滚动条的轨道 */
   ::-webkit-scrollbar-track {
     background: #eeeeee;
+    /* background: #ffffff; */
   }
 
   /* 滚动条的滑块 */
@@ -32,6 +33,6 @@ html {
 
   /* 鼠标悬停在滑块上时 */
   ::-webkit-scrollbar-thumb:hover {
-    background: #a6a6a6;
+    background: #4f4f4f;
   }
 }

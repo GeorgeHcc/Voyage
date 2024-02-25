@@ -3,16 +3,22 @@ import { Avatar, Button, List, Dropdown, ConfigProvider } from "antd";
 import type { MenuProps } from "antd";
 import { Input } from "antd";
 import styled from "styled-components";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  PlusOutlined,
+  UsergroupAddOutlined,
+  VideoCameraAddOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
 
 const data = Array.from({ length: 30 }, (_, i) => ({
   title: `Ant Design Title ${i + 1}`,
 }));
 
 const items: MenuProps["items"] = [
-  { key: "1", label: "添加联系人" },
-  { key: "2", label: "创建群组" },
-  { key: "3", label: "加入会议" },
+  { key: "1", label: "添加联系人",icon:<UserAddOutlined/> },
+  { key: "2", label: "创建群组", icon: <UsergroupAddOutlined /> },
+  { key: "3", label: "加入会议", icon: <VideoCameraAddOutlined /> },
 ];
 const ChatList: React.FC = () => {
   const description =
@@ -20,7 +26,8 @@ const ChatList: React.FC = () => {
 
   return (
     <>
-      <Search>
+      <div style={{ height: 60 }}></div>
+      <InnerSiderHeader>
         <div>
           <Input
             placeholder="搜索"
@@ -31,11 +38,11 @@ const ChatList: React.FC = () => {
           ></Input>
         </div>
         <Dropdown menu={{ items }}>
-          <Button shape="circle" type="primary">
-            +
+          <Button shape="circle" type="default">
+            <PlusOutlined />
           </Button>
         </Dropdown>
-      </Search>
+      </InnerSiderHeader>
 
       <ChatMenuList
         itemLayout="horizontal"
@@ -54,7 +61,7 @@ const ChatList: React.FC = () => {
   );
 };
 
-const Search = styled.div`
+const InnerSiderHeader = styled.div`
   position: fixed;
   /* margin-bottom: 5px; */
   padding: 10px 10px;
@@ -62,7 +69,7 @@ const Search = styled.div`
   width: 350px;
   height: 60px;
   display: flex;
-  background-color: #ffffff;
+  background-color: #fff;
   justify-content: space-between;
   & input {
     /* margin: 10px;
@@ -70,10 +77,12 @@ const Search = styled.div`
   }
 `;
 const ChatMenuList = styled(List)`
-  top: 60px;
+  /* top: 60px; */
   background-color: #f9f9f9;
-  height: calc(100% - 55px);
+  /* height: calc(100% - 85px); */
+  flex: 1;
   overflow-y: scroll;
+
   li:hover {
     background-color: #ececec;
   }
