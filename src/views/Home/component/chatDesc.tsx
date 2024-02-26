@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Avatar, Empty, Layout, Tooltip, Input, Button, Alert } from "antd";
+import React, { useContext, useState, useRef, forwardRef, ForwardedRef } from "react";
+import { Avatar, Empty, Layout, Tooltip, Input, Button } from "antd";
 import george from "@/assets/georgeh.jpg";
 import styled from "styled-components";
 import { List } from "antd";
@@ -9,6 +9,11 @@ import { purple } from "@ant-design/colors";
 import { css } from "styled-components";
 import { LayoutContext } from "@/views/Home/contexts";
 import { EmojiOutlined } from "@/assets/icons";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import { init } from "emoji-mart";
+
+init({ data });
 const { Content, Footer } = Layout;
 const { TextArea } = Input;
 type ChatMsgType = {
@@ -32,7 +37,7 @@ const chat = [
   { isMe: false, data: "sjdashda" },
   { isMe: false, data: "sjdashda" },
   { isMe: false, data: "sjdashda" },
-  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashdapO😂" },
   { isMe: false, data: "sjdashda" },
   { isMe: false, data: "sjdashda" },
   { isMe: false, data: "sjdashda" },
@@ -46,16 +51,26 @@ const chat = [
 export default function ChatDesc() {
   const [chatMessages, setChatMessages] = useState<ChatMsgType[]>(chat);
   const [msgValue, setMsgValue] = useState<string>("");
+  const [openEmoji, setOpenEmoji] = useState(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>();
+  const contentRef = useRef<HTMLDivElement>();
+ 
+  
   function sendMessage(msg: string) {
     if (msg.trim().length > 0) {
       const newMsgs = [...chatMessages, { data: msgValue!, isMe: true }];
       setChatMessages(newMsgs);
+      setOpenEmoji(false);
       setMsgValue("");
+      
+     queueMicrotask(()=>{
+      contentRef.current!.scrollTop = 9999;//滚动到底部
+     })
     } else {
-      alert("!!!");
       setMsgValue("");
     }
   }
+
   return (
     <>
       <div style={{ width: "100%", height: "100%", display: "inline-block" }}>
@@ -66,9 +81,9 @@ export default function ChatDesc() {
           <div style={{ height: "60px", width: "100%", flexShrink: 0 }}></div>
           <ContentHeader />
           <Layout>
-            <ChatContent>
+            <ChatContent ref={contentRef}>
               <div>
-                {chatMessages.map((item, index) => {
+                {chatMessages.map((item, index, arr) => {
                   return (
                     <ChatRecord
                       key={`${index}`}
@@ -81,9 +96,9 @@ export default function ChatDesc() {
               </div>
             </ChatContent>
 
-            <SendMessageBar>
-              <Emoji />
+            <SendMessageBar >
               <TextArea
+                ref={textAreaRef}
                 allowClear
                 placeholder="发送给George"
                 value={msgValue}
@@ -92,12 +107,38 @@ export default function ChatDesc() {
                   setMsgValue(e.target.value);
                 }}
                 onKeyDown={(e) => {
+                  if (e.shiftKey && e.key === "Enter") {
+                    setMsgValue(msgValue + "\n");
+                    // alert("shift")
+                  }
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    return sendMessage(msgValue!);
+                    return e.shiftKey || sendMessage(msgValue!);
                   }
                 }}
               />
+              <EmojiWrap>
+                <EmojiPicker isOpen={openEmoji}>
+                  <Picker
+                    data={data}
+                    onEmojiSelect={(emo: any) => {
+                      textAreaRef.current!.focus();
+                      setMsgValue(msgValue + emo.native);
+                    }}
+                    skinTonePosition="search"
+                    // theme="dark"
+                    // onClickOutside={() => setOpenEmoji(false)}
+                  />
+                </EmojiPicker>
+                <IconButton
+                  icon={<EmojiOutlined />}
+                  onClick={() => {
+                    textAreaRef.current!.focus();
+                    setOpenEmoji(!openEmoji);
+                  }}
+                />
+              </EmojiWrap>
+
               {/* <SendOutlined twoToneColor={purple[5]} /> */}
               <Button
                 type="primary"
@@ -154,6 +195,7 @@ const ContentHeader: React.FC = () => {
 
 function splitStringIntoArray(str: string, chunkSize: number) {
   const array = [];
+  const reg = /\\n/g;
   for (let i = 0; i < str.length; i += chunkSize) {
     // Ensure we don't go beyond the string length
     const end = Math.min(i + chunkSize, str.length);
@@ -164,20 +206,22 @@ function splitStringIntoArray(str: string, chunkSize: number) {
 }
 type ChatRecordProps = { data: string; imgUrl: string; isMe: boolean };
 
-const ChatRecord: React.FC<ChatRecordProps> = (props) => {
-  return (
-    <RecordItem isme={props.isMe}>
-      <ChatUserAvatar src={props.imgUrl}></ChatUserAvatar>
-      <div className="chat-bubble">
-        {splitStringIntoArray(props.data, 30).map((item, key) => (
-          <p key={key} className="chat-bubble-content">
-            {item}
-          </p>
-        ))}
-      </div>
-    </RecordItem>
-  );
-};
+const ChatRecord: React.FC<ChatRecordProps> = forwardRef(
+  (props, ref: ForwardedRef<HTMLDivElement | undefined>) => {
+    return (
+      <RecordItem isme={props.isMe} ref={ref}>
+        <ChatUserAvatar src={props.imgUrl}></ChatUserAvatar>
+        <div className="chat-bubble">
+          {splitStringIntoArray(props.data, 30).map((item, key) => (
+            <p key={key} className="chat-bubble-content">
+              {item}
+            </p>
+          ))}
+        </div>
+      </RecordItem>
+    );
+  }
+);
 
 const SendMessageBar = styled(Footer)`
   background-color: #fff;
@@ -195,11 +239,26 @@ const SendMessageBar = styled(Footer)`
     }
   }
 `;
-const Emoji = styled(EmojiOutlined)`
-  font-size: 25;
-  cursor: pointer;
-  color: yellow;
+
+const EmojiWrap = styled.div`
+  position: relative;
 `;
+
+type EmojiPickerProps = { isOpen: boolean };
+const EmojiPicker = styled.div<EmojiPickerProps>`
+  position: absolute;
+  bottom: 40px;
+  right: -75px;
+  z-index: 9999;
+  border-radius: 1px solid red;
+  padding: 10px;
+  ${(props) => (props.isOpen ? "display:block;" : "display: none;")}
+`;
+// const EmojiButton = styled(EmojiOutlined)`
+//   font-size: 25;
+//   cursor: pointer;
+//   color: yellow;
+// `;
 
 type P = { isme: boolean };
 
@@ -275,6 +334,7 @@ const RecordItem = styled.div<P>`
     &-content {
       margin: 0px;
       user-select: text;
+      font-size: 16px;
     }
   }
 `;
