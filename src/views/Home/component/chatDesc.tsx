@@ -4,11 +4,11 @@ import george from "@/assets/georgeh.jpg";
 import styled from "styled-components";
 import { List } from "antd";
 import { VideoCameraAddOutlined, UserAddOutlined, SendOutlined } from "@ant-design/icons";
-import { IconButton } from "@/components";
+import { IconButton } from "@/components/icons/iconButton";
 import { purple } from "@ant-design/colors";
 import { css } from "styled-components";
 import { LayoutContext } from "@/views/Home/contexts";
-import { EmojiOutlined } from "@/assets/icons";
+import { EmojiOutlined } from "@/components/icons/iconFont";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { init } from "emoji-mart";
@@ -54,18 +54,17 @@ export default function ChatDesc() {
   const [openEmoji, setOpenEmoji] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>();
   const contentRef = useRef<HTMLDivElement>();
- 
-  
+
   function sendMessage(msg: string) {
     if (msg.trim().length > 0) {
       const newMsgs = [...chatMessages, { data: msgValue!, isMe: true }];
       setChatMessages(newMsgs);
       setOpenEmoji(false);
       setMsgValue("");
-      
-     queueMicrotask(()=>{
-      contentRef.current!.scrollTop = 9999;//滚动到底部
-     })
+
+      queueMicrotask(() => {
+        contentRef.current!.scrollTop = 9999; //滚动到底部
+      });
     } else {
       setMsgValue("");
     }
@@ -83,7 +82,7 @@ export default function ChatDesc() {
           <Layout>
             <ChatContent ref={contentRef}>
               <div>
-                {chatMessages.map((item, index, arr) => {
+                {chatMessages.map((item, index) => {
                   return (
                     <ChatRecord
                       key={`${index}`}
@@ -96,7 +95,7 @@ export default function ChatDesc() {
               </div>
             </ChatContent>
 
-            <SendMessageBar >
+            <SendMessageBar>
               <TextArea
                 ref={textAreaRef}
                 allowClear
@@ -121,7 +120,7 @@ export default function ChatDesc() {
                 <EmojiPicker isOpen={openEmoji}>
                   <Picker
                     data={data}
-                    onEmojiSelect={(emo: any) => {
+                    onEmojiSelect={(emo: unknown) => {
                       textAreaRef.current!.focus();
                       setMsgValue(msgValue + emo.native);
                     }}
@@ -195,7 +194,7 @@ const ContentHeader: React.FC = () => {
 
 function splitStringIntoArray(str: string, chunkSize: number) {
   const array = [];
-  const reg = /\\n/g;
+  // const reg = /\\n/g;
   for (let i = 0; i < str.length; i += chunkSize) {
     // Ensure we don't go beyond the string length
     const end = Math.min(i + chunkSize, str.length);
@@ -302,6 +301,7 @@ const RecordItem = styled.div<P>`
       : ""}
 
   & .chat-bubble {
+    white-space: pre-wrap;
     display: inline-block;
     max-width: 50%;
     position: relative;
