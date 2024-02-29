@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Button, List, Dropdown, ConfigProvider } from "antd";
+import { Avatar, Button, List, Dropdown } from "antd";
 import type { MenuProps } from "antd";
 import { Input } from "antd";
 import styled from "styled-components";
@@ -51,6 +51,7 @@ const ChatList: React.FC = () => {
           <List.Item>
             <List.Item.Meta
               avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
+              //@ts-ignore
               title={<a href="https://ant.design">{item.title}</a>}
               description={description.length > 30 ? description.slice(0, 40) + "..." : description}
             />

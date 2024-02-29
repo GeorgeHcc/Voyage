@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { DefaultLayout } from "@/layout/defaultLayout";
 import Video from "./component/video";
 import BottomToolBar from "./component/bottomToolBar";
@@ -38,11 +38,13 @@ const Meeting: React.FC = () => {
   return (
     <>
       {contextHolder}
-      <DefaultLayout
-        header={<div style={{ height: "100%", backgroundColor: "white" }}>header</div>}
-        footer={<BottomToolBar />}
-        content={<Video width={"100%"} height={"100%"} ref={videoRef} reverse></Video>}
-      ></DefaultLayout>
+      <Suspense fallback="loading">
+        <DefaultLayout
+          header={<div style={{ height: "100%", backgroundColor: "white" }}>header</div>}
+          footer={<BottomToolBar />}
+          content={<Video width={"100%"} height={"100%"} ref={videoRef} reverse></Video>}
+        ></DefaultLayout>
+      </Suspense>
     </>
   );
 };

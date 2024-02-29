@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef, forwardRef, ForwardedRef } from "react";
-import { Avatar, Empty, Layout, Tooltip, Input, Button } from "antd";
+import { Avatar, Empty, Layout, Tooltip, Input, Button, Popover } from "antd";
 import george from "@/assets/georgeh.jpg";
 import styled from "styled-components";
 import { List } from "antd";
@@ -7,7 +7,7 @@ import { VideoCameraAddOutlined, UserAddOutlined, SendOutlined } from "@ant-desi
 import { IconButton } from "@/components/icons/iconButton";
 import { purple } from "@ant-design/colors";
 import { css } from "styled-components";
-import { LayoutContext } from "@/views/Home/contexts";
+import { LayoutContext } from "@/views/messages/contexts";
 import { EmojiOutlined } from "@/components/icons/iconFont";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
@@ -52,6 +52,7 @@ export default function ChatDesc() {
   const [chatMessages, setChatMessages] = useState<ChatMsgType[]>(chat);
   const [msgValue, setMsgValue] = useState<string>("");
   const [openEmoji, setOpenEmoji] = useState(false);
+  const [openPopover, setOpenPopover] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>();
   const contentRef = useRef<HTMLDivElement>();
 
@@ -66,6 +67,10 @@ export default function ChatDesc() {
         contentRef.current!.scrollTop = 9999; //滚动到底部
       });
     } else {
+      setOpenPopover(true);
+      setTimeout(() => {
+        setOpenPopover(false);
+      }, 1000);
       setMsgValue("");
     }
   }
@@ -96,31 +101,34 @@ export default function ChatDesc() {
             </ChatContent>
 
             <SendMessageBar>
-              <TextArea
-                ref={textAreaRef}
-                allowClear
-                placeholder="发送给George"
-                value={msgValue}
-                autoSize={{ minRows: 1, maxRows: 4 }}
-                onChange={(e) => {
-                  setMsgValue(e.target.value);
-                }}
-                onKeyDown={(e) => {
-                  if (e.shiftKey && e.key === "Enter") {
-                    setMsgValue(msgValue + "\n");
-                    // alert("shift")
-                  }
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    return e.shiftKey || sendMessage(msgValue!);
-                  }
-                }}
-              />
+              <Popover title="不能发送空的消息哦😘" open={openPopover}>
+                <TextArea
+                  ref={textAreaRef}
+                  allowClear
+                  placeholder="发送给George"
+                  value={msgValue}
+                  autoSize={{ minRows: 1, maxRows: 4 }}
+                  onChange={(e) => {
+                    setMsgValue(e.target.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.shiftKey && e.key === "Enter") {
+                      setMsgValue(msgValue + "\n");
+                      // alert("shift")
+                    }
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      return e.shiftKey || sendMessage(msgValue!);
+                    }
+                  }}
+                />
+              </Popover>
+
               <EmojiWrap>
                 <EmojiPicker isOpen={openEmoji}>
                   <Picker
                     data={data}
-                    onEmojiSelect={(emo: unknown) => {
+                    onEmojiSelect={(emo: { native: string }) => {
                       textAreaRef.current!.focus();
                       setMsgValue(msgValue + emo.native);
                     }}

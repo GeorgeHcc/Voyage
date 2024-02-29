@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, theme, Avatar, Card, ConfigProvider, message } from "antd";
 import styled from "styled-components";
-import IconButton from "@/components/icons/iconButton";
+import { IconButton } from "@/components/icons/iconButton";
 import { loginApi } from "@/config";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
