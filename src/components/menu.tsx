@@ -1,4 +1,4 @@
-import React from "react";
+import React, { startTransition } from "react";
 import { ConfigProvider, Menu } from "antd";
 import type { MenuProps } from "antd";
 import { purple } from "@ant-design/colors";
@@ -47,7 +47,9 @@ const V_Menu: React.FC = () => {
         // inlineCollapsed={true}
         style={{ height: "100%", backgroundColor: `${purple[6]}` }}
         onSelect={({key}) => {
+          startTransition(()=>{
           navigate(key);
+          })
         }}
       ></Menu>
     </ConfigProvider>
