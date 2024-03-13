@@ -48,7 +48,7 @@ const V_Menu: React.FC = () => {
         style={{ height: "100%", backgroundColor: `${purple[6]}` }}
         onSelect={({key}) => {
           startTransition(()=>{
-            navigate(key);
+          navigate(key);
           })
         }}
       ></Menu>
