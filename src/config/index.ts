@@ -1,13 +1,13 @@
 // import axios from "axios";
 
-const URL = import.meta.env.DEV ? "http://localhost:5000/api/auth" : "";
+const URL = import.meta.env.VITE_API_URL
 
-const genURL = (url: string) => `${URL}/${url}`;
+const genUserAPI = (url: string) => `${URL}/user/${url}`;
 
-const loginApi = genURL("login");
-const registerApi = genURL("register");
-const logoutApi = genURL("logout");
-const getUserApi = genURL("getUser");
+const loginApi = genUserAPI("login");
+const registerApi = genUserAPI("register");
+const logoutApi = genUserAPI("logout");
+const getUserApi = genUserAPI("getUser");
 
  
 //  type ApiName = "login" | "register" | "logout" | "getUser";

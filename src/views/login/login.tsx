@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   LockOutlined,
   UserOutlined,
@@ -12,18 +12,37 @@ import { IconButton } from "@/components/icons/iconButton";
 import { loginApi } from "@/config";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 const Login: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const onFinish = (values: unknown) => {
-    axios.post(loginApi, values).then((res) => {
-      if (res.data.status) {
-        message.success(`${res.data.msg} Hi,${res.data.user.nick_name}!`);
-        navigate("/");
-      } else {
-        message.error(res.data.msg);
-      }
-    });
+    console.log(values)
+    try {
+      setLoading(true);
+      axios
+        .post(loginApi, values)
+        .then((res) => {
+          if (res.data.status) {
+            message.success(`${res.data.msg} Hi,${res.data.user.nick_name}!`);
+            navigate("/");
+          } else {
+            message.error(res.data.msg);
+          }
+        })
+        .catch((e) => {
+          console.log(e.message);
+          message.error(e.message);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+        //@ts-ignore
+    } catch (e:any) {
+      console.log("error", e);
+      message.error(e);
+    }
   };
   return (
     <ConfigProvider
@@ -88,7 +107,12 @@ const Login: React.FC = () => {
               </Form.Item>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="login-form-button"
+                  loading={loading}
+                >
                   Sign in
                 </Button>
               </Form.Item>

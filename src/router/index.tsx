@@ -12,7 +12,7 @@ const NotFoundPage = lazy(() => import("@/views/notFoundPage"));
 const routes: RouteObject[] = [
   {
     path: "/",
-    element: <Navigate to="/message" />,
+    element: <Navigate to="/messages" />,
   },
   {
     path: "/login",
@@ -23,8 +23,9 @@ const routes: RouteObject[] = [
     element: <Register />,
   },
   {
-    path: "/message",
+    path: "/messages",
     element: <Messages />,
+    title:"消息"
   },
  
   {

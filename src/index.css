@@ -4,11 +4,14 @@ html {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  font-family: "gg sans", "Microsoft YaHei New", 微软雅黑, "Microsoft Yahei", "Microsoft JhengHei",
+    宋体, SimSun, "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 #root {
   width: 100%;
   height: 100%;
-
+  font-family: "gg sans", "Microsoft YaHei New", 微软雅黑, "Microsoft Yahei", "Microsoft JhengHei",
+    宋体, SimSun, "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   user-select: none;
 
   overflow: hidden;
@@ -33,6 +36,6 @@ html {
 
   /* 鼠标悬停在滑块上时 */
   ::-webkit-scrollbar-thumb:hover {
-    background: #4f4f4f;
+    background: #9d9d9d;
   }
 }

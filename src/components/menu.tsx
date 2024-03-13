@@ -1,10 +1,10 @@
-import React from "react";
+import React, { startTransition } from "react";
 import { ConfigProvider, Menu } from "antd";
 import type { MenuProps } from "antd";
 import { purple } from "@ant-design/colors";
 import { VideoCameraFilled, MessageFilled, SettingFilled } from "@ant-design/icons";
 import { ContactListFilled } from "@/components/icons/iconFont";
-import { useNavigate, NavigateOptions} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function genItem(title: React.ReactNode, key: React.Key, icon?: React.ReactNode): MenuItem {
@@ -47,7 +47,9 @@ const V_Menu: React.FC = () => {
         // inlineCollapsed={true}
         style={{ height: "100%", backgroundColor: `${purple[6]}` }}
         onSelect={({key}) => {
-          navigate(key);
+          startTransition(()=>{
+            navigate(key);
+          })
         }}
       ></Menu>
     </ConfigProvider>
