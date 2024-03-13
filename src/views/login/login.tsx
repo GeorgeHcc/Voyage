@@ -9,7 +9,7 @@ import {
 import { Button, Checkbox, Form, Input, theme, Avatar, Card, ConfigProvider, message } from "antd";
 import styled from "styled-components";
 import { IconButton } from "@/components/icons/iconButton";
-import { loginApi } from "@/config";
+import { loginApi } from "@/service/api";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
