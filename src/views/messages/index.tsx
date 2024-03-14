@@ -1,10 +1,10 @@
 import React, { Suspense, useState } from "react";
 import { Layout } from "antd";
 import styled from "styled-components";
-import george from "@/assets/georgeh.jpg";
+
 import RightContainer from "./component/RightContainer";
 import LeftContainer from "./component/LeftContainer";
-import { ChatListItemData } from "./component/LeftContainer/Chat_List";
+import { ChatListItemData } from "./component/LeftContainer/ChatList";
 const { Sider, Content } = Layout;
 const Messages: React.FC = () => {
   // const contentData: RightContainerProps = {
@@ -13,13 +13,23 @@ const Messages: React.FC = () => {
   //   receiverName: "George H",
   //   reciverStatus: "在线",
   // };
-  const [data, setData] = useState<ChatListItemData | null>(null);
+
+  const sessionChatData = sessionStorage.getItem("current-chat-data")
+    ? JSON.parse(sessionStorage.getItem("current-chat-data")!)
+    : null;
+  const [data, setData] = useState<ChatListItemData | null>(sessionChatData);
+
+  const setAndCacheData = (selectedVal: ChatListItemData) => {
+    sessionStorage.setItem("current-chat-data", JSON.stringify(selectedVal));
+    setData(selectedVal);
+  };
+
   return (
     <Suspense fallback={"load"}>
       <Layout>
         <InnerSider width={350}>
           <LeftContainer
-            userSelectedChange={(selectedVal: ChatListItemData) => setData(selectedVal)}
+            userSelectedChange={(selectedVal: ChatListItemData) => setAndCacheData(selectedVal)}
           />
         </InnerSider>
         <MainContent>
@@ -50,4 +60,4 @@ const Resizer = styled.div`
   height: 100%;
   cursor: ew-resize;
 `;
-export default Messages;
+export default React.memo(Messages);
