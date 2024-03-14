@@ -1,10 +1,10 @@
-import React, { startTransition } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { ConfigProvider, Menu } from "antd";
 import type { MenuProps } from "antd";
 import { purple } from "@ant-design/colors";
 import { VideoCameraFilled, MessageFilled, SettingFilled } from "@ant-design/icons";
 import { ContactListFilled } from "@/components/icons/iconFont";
-import { useNavigate} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 type MenuItem = Required<MenuProps>["items"][number];
 
 function genItem(title: React.ReactNode, key: React.Key, icon?: React.ReactNode): MenuItem {
@@ -17,8 +17,18 @@ const items: MenuItem[] = [
   genItem("设置", "/setting", <SettingFilled />),
 ];
 const V_Menu: React.FC = () => {
-  const navigate  = useNavigate();
-  
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedKey, setSelectedKey] = useState(location.pathname);
+  useEffect(() => {
+    setSelectedKey(location.pathname); // 当 URL 变化时更新选中键
+  }, [location]);
+
+  const handleSelect = ({ key }: { key: string }) => {
+    startTransition(() => {
+      navigate(key);
+    });
+  };
   return (
     <ConfigProvider
       theme={{
@@ -44,14 +54,13 @@ const V_Menu: React.FC = () => {
         items={items}
         mode="inline"
         defaultSelectedKeys={["/messages"]}
+        selectedKeys={[selectedKey]}
         // inlineCollapsed={true}
         style={{ height: "100%", backgroundColor: `${purple[6]}` }}
-        onSelect={({key}) => {
-          startTransition(()=>{
-          navigate(key);
-          })
-        }}
-      ></Menu>
+        onSelect={handleSelect}
+      >
+        <Menu.Item></Menu.Item>
+      </Menu>
     </ConfigProvider>
   );
 };
