@@ -3,21 +3,27 @@
 import routes from "../router";
 // import GlobalStyl from "./style/theme";
 import { useRoutes } from "react-router-dom";
-import { ConfigProvider, GlobalToken, theme } from "antd";
+import { ConfigProvider, theme } from "antd";
 import { purple } from "@ant-design/colors";
 import MainLayout from "../layout/mainLayout";
 import SocketProvider from "@/components/SocketProvider";
-import styled from "styled-components";
-const { useToken } = theme;
+import useThemeStore from "@/store/modules/useThemeStore";
+
 function App() {
-  // const socket = io("http://localhost:5000");
-  // socket.emit("chat", Date.now(), "111");
-  const { token } = useToken();
+  const curTheme = useThemeStore((state) => state.theme);
+
+  const lastTheme = JSON.parse(localStorage.getItem("theme")!).state.theme;
+
   return (
     <SocketProvider>
       <ConfigProvider
         theme={{
-          // algorithm: theme.darkAlgorithm,
+          algorithm:
+            lastTheme === "dark"
+              ? theme.darkAlgorithm
+              : curTheme === "dark"
+              ? theme.darkAlgorithm
+              : undefined,
           token: {
             colorPrimary: `${purple[4]}`,
             controlItemBgHover: `${purple[0]}`,
@@ -32,8 +38,4 @@ function App() {
   );
 }
 
-// const AppContainer = styled.div<{ token: GlobalToken }>`
-//   color: ${(t) => t.token.colorText};
-//   background-color: ${(t) => t.token.colorBgContainer};
-// `;
 export default App;

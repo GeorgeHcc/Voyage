@@ -24,7 +24,7 @@ const { useToken } = theme;
 const data: ChatListItemData[] = Array.from({ length: 30 }, (_, i) => ({
   userId:i,
   userAvatar: george,
-  title: `黄哥Geroge H ${i + 1}`,
+  title: `Geroge H ${i + 1}`,
   lastMsg: "你好啊",
   lastTime: "昨天",
   userStatus: "在线",
