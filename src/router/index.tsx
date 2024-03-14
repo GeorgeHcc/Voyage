@@ -25,9 +25,8 @@ const routes: RouteObject[] = [
   {
     path: "/messages",
     element: <Messages />,
-    title:"消息"
   },
- 
+
   {
     path: "/meeting",
     element: <Meeting />,
@@ -37,14 +36,13 @@ const routes: RouteObject[] = [
     element: <Contacts />,
   },
   {
-    path:"/setting",
-    element:<Setting/>
-
+    path: "/setting",
+    element: <Setting />,
   },
   {
-    path:"*",
-    element:<NotFoundPage/>
-  }
+    path: "*",
+    element: <NotFoundPage />,
+  },
 ];
 
 export default routes;
