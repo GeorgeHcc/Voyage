@@ -1,20 +1,17 @@
 import React, { Suspense, useState } from "react";
 import { Layout } from "antd";
 import styled from "styled-components";
-import RightContainer from "./component/RightContainer";
-import LeftContainer from "./component/LeftContainer";
-import { ChatListItemData } from "./component/LeftContainer/ChatList";
+import RightContainer from "./RightContainer";
+import LeftContainer from "./LeftContainer";
+import { ChatListItemData } from "./LeftContainer/ChatList";
 
 const { Sider, Content } = Layout;
 
-
 const Messages: React.FC = () => {
-
   const sessionChatData = sessionStorage.getItem("current-chat-data")
     ? JSON.parse(sessionStorage.getItem("current-chat-data")!)
     : null;
   const [data, setData] = useState<ChatListItemData | null>(sessionChatData);
-
 
   //更新选中的好友聊天data并缓存到session，用于切换页面保活
   const setAndCacheData = (selectedVal: ChatListItemData) => {
@@ -25,7 +22,7 @@ const Messages: React.FC = () => {
   return (
     <Suspense fallback={"load"}>
       <Layout>
-        <InnerSider width={350}>
+        <InnerSider width={300}>
           <LeftContainer
             userSelectedChange={(selectedVal: ChatListItemData) => setAndCacheData(selectedVal)}
           />

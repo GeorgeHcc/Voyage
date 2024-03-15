@@ -12,7 +12,7 @@ html {
   height: 100%;
   font-family: "gg sans", "Microsoft YaHei New", 微软雅黑, "Microsoft Yahei", "Microsoft JhengHei",
     宋体, SimSun, "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  user-select: none;
+  /* user-select: none; */
 
   overflow: hidden;
 

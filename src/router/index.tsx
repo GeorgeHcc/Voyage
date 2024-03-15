@@ -7,6 +7,9 @@ const Meeting = lazy(() => import("@/views/meeting"));
 const Messages = lazy(() => import("@/views/messages"));
 const Contacts = lazy(() => import("@/views/contacts"));
 const Setting = lazy(() => import("@/views/setting"));
+const AccountSetting = lazy(() => import("@/views/setting/account"));
+const SystemSetting = lazy(() => import("@/views/setting/system"));
+const OtherSetting = lazy(() => import("@/views/setting/other"));
 const NotFoundPage = lazy(() => import("@/views/notFoundPage"));
 
 const routes: RouteObject[] = [
@@ -38,6 +41,11 @@ const routes: RouteObject[] = [
   {
     path: "/setting",
     element: <Setting />,
+    children: [
+      { path: "/setting/account", element: <AccountSetting /> },
+      { path: "/setting/system", element: <SystemSetting /> },
+      { path: "/setting/other", element: <OtherSetting /> },
+    ],
   },
   {
     path: "*",

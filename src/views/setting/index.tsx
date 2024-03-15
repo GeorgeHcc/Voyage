@@ -1,35 +1,95 @@
-import React, { Suspense, useEffect, useState } from "react";
-import { Switch, Flex } from "antd";
+import { Layout, GlobalToken, theme } from "antd";
+import styled from "styled-components";
+import React, { Suspense, useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+const { Sider, Content } = Layout;
 
-import { MoonFilled, SunFilled } from "@ant-design/icons";
-import useThemeStore from "@/store/modules/useThemeStore";
+const { useToken } = theme;
+const settingOptions: { label: string; path: string }[] = [
+  { label: "账户设置", path: "/setting/account" },
+  { label: "系统设置", path: "/setting/system" },
+  { label: "其他设置", path: "/setting/other" },
+];
+const Setting: React.FC = () => {
+  const [selectItem, setSelectedItem] = useState<string | number>();
+  const { token } = useToken();
 
-import { ThemeType } from "@/store/modules/useThemeStore";
-function Setting() {
-  const setTheme = useThemeStore((state) => state.setTheme);
-  const localTheme = JSON.parse(localStorage.getItem("theme") || "").state.theme;
-  const [curentTheme, setCurrentTheme] = useState<ThemeType>(localTheme);
-
-  useEffect(() => {
-    setTheme(curentTheme);
-  }, [curentTheme]);
   return (
-    <Suspense fallback="loading">
-      <Flex>
-        <div>
-          夜间模式：
-          <Switch
-            checked={curentTheme === "dark"}
-            checkedChildren={<MoonFilled />}
-            unCheckedChildren={<SunFilled />}
-            onChange={(checked) => {
-              checked ? setCurrentTheme("dark") : setCurrentTheme("light");
-            }}
-          />
-        </div>
-      </Flex>
+    <Suspense fallback={"load"}>
+      <Container token={token}>
+        <InnerSider width={300}>
+          <ul className="setting-options">
+            {settingOptions.map((item, index) => (
+              <NavLink to={item.path}>
+                <li
+                  key={item.path}
+                  className={`setting-item ${index === selectItem && "selected"}`}
+                  onClick={() => {
+                    setSelectedItem(index);
+                  }}
+                >
+                  <div>{item.label}</div>
+                </li>
+              </NavLink>
+            ))}
+          </ul>
+        </InnerSider>
+        <Content className="content">
+          <Resizer />
+          {/* <Flex> */}
+          <Outlet />
+          {/* </Flex> */}
+        </Content>
+      </Container>
     </Suspense>
   );
-}
+};
 
-export default Setting;
+const Container = styled(Layout)<{ token: GlobalToken }>`
+  & .setting-options {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    list-style-type: none;
+    /* background-color: ${(t) => t.token.colorBgLayout}; */
+    /* color: ${(t) => t.token.colorTextHeading}; */
+    background-color: ${(t) => t.token.colorBgContainer};
+    & .setting-item {
+      width: 100%;
+      height: 50px;
+      padding: 0px 10px;
+      display: flex;
+      align-items: center;
+      /* border-radius: 8px; */
+      & > div {
+        color: ${(t) => t.token.colorTextHeading};
+      }
+      /* border:1px solid red; */
+      &:hover {
+        background-color: ${(t) => t.token.colorBgTextHover};
+      }
+      &.selected {
+        background-color: ${(t) => t.token.colorBgTextActive};
+      }
+    }
+  }
+  & .content {
+    display: flex;
+    flex-direction: row;
+    color: ${(t) => t.token.colorTextHeading};
+    background-color: ${(t) => t.token.colorBgLayout};
+  }
+`;
+const InnerSider = styled(Sider)`
+  background-color: transparent !important;
+  height: 100%;
+`;
+const MainContent = styled(Content)``;
+
+const Resizer = styled.div`
+  display: inline-block !important;
+  width: 2px;
+  height: 100%;
+  cursor: ew-resize;
+`;
+export default React.memo(Setting);
