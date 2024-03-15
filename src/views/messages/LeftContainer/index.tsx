@@ -38,7 +38,7 @@ export type LeftContainerProps = {
 const LeftContainer: React.FC<LeftContainerProps> = ({ userSelectedChange }) => {
   const { token } = useToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [firendsList, setFirendsList] = useState<ChatListItemData[]|null>(null);
+  const [firendsList, setFirendsList] = useState<ChatListItemData[] | null>(null);
 
   const handleClick: MenuProps["onClick"] = ({ key }) => {
     setIsModalOpen(true);
@@ -100,7 +100,7 @@ const Container = styled.div<{ token: GlobalToken }>`
     align-items: center;
     justify-content: space-between;
     & > span {
-      width: 250px;
+      width: 200px;
     }
     & .ant-input-suffix {
       color: ${(t) => t.token.colorTextDescription};

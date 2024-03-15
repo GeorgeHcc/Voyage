@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Avatar, Dropdown, theme, GlobalToken, Badge } from "antd";
 import { purple } from "@ant-design/colors";
@@ -10,6 +10,7 @@ export interface ChatListItemData {
   userStatus?: string;
   avatarImage?: string;
   remark?: string;
+  nick_name?: string;
   title?: string;
   lastMsg?: string;
   lastTime?: string;
@@ -60,9 +61,13 @@ const ChatList: React.FC<ChatListProps> = ({ data, onSelected }) => {
           >
             <div className="left">
               <Badge count={index} size="small">
-                <Avatar size={40} shape="square" src={item.avatarImage}>
-                  {item.avatarImage ? "" : item.remark}
-                </Avatar>
+                {item.avatarImage ? (
+                  <Avatar size={40} shape="square" src={item.avatarImage} />
+                ) : (
+                  <Avatar size={40} shape="square">
+                    {item.nick_name}
+                  </Avatar>
+                )}
               </Badge>
 
               <span className="chat-info">
@@ -125,8 +130,8 @@ const ChatListContainer = styled.ul<{ token: GlobalToken }>`
     }
     & .right {
       & .chat-last-time {
-        font-family: "Microsoft YaHei New", 微软雅黑, "Microsoft Yahei", "Microsoft JhengHei",
-          SimSun, "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        /* font-family: "Microsoft YaHei New", 微软雅黑, "Microsoft Yahei", "Microsoft JhengHei",
+          SimSun, "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; */
 
         font-size: 0.75rem;
       }

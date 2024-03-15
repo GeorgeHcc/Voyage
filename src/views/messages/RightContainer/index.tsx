@@ -17,6 +17,9 @@ export type MsgType = {
   isMe: boolean;
   data: string;
   time?: Date;
+  avatarImage?: string;
+  nick_name?: string;
+  group_nick_name?:string;
 };
 
 // const chat = [
@@ -59,9 +62,9 @@ const RightContainer: React.FC<RightContainerProps> = (props) => {
   useEffect(() => {
     const userId = getUserInfo(["id"]);
     axios.post(getMsgListByUser, { from: userId, to: props.data?.friendID }).then((res) => {
-      const list = res.data.msgList.map((item:any) => {
+      const list = res.data.msgList.map((item: any) => {
         const msg = { data: item.msg, time: item.time };
-        return (item.from === userId ? { ...msg, isMe: true } : { ...msg, isMe: false });
+        return item.from === userId ? { ...msg, isMe: true } : { ...msg, isMe: false };
       });
       setChatMessages(list);
     });
@@ -78,6 +81,7 @@ const RightContainer: React.FC<RightContainerProps> = (props) => {
       setChatMessages([...chatMessages, msg]);
     });
   }, [chatMessages, io]);
+
   function pushMsg(msg: MsgType) {
     setChatMessages([...chatMessages, msg]);
   }
@@ -98,7 +102,11 @@ const RightContainer: React.FC<RightContainerProps> = (props) => {
               <div className="header-left h-item">
                 <div className="header-userinfo">
                   <span className="user-avatar">
-                    <Avatar src={props.data.avatarImage} size={40} />
+                    {props.data.avatarImage ? (
+                      <Avatar size={40} src={props.data.avatarImage} />
+                    ) : (
+                      <Avatar size={40}>{props.data.nick_name}</Avatar>
+                    )}
                   </span>
                   <span className="user-info">
                     <div className="title">{props.data.remark}</div>
@@ -124,7 +132,8 @@ const RightContainer: React.FC<RightContainerProps> = (props) => {
                     <ChatRecord
                       key={`${index}`}
                       isMe={item.isMe}
-                      imgUrl={george}
+                      avatarImage={item.isMe?george: item.avatarImage}
+                      nick_name={item.nick_name}
                       data={item.data}
                     ></ChatRecord>
                   );

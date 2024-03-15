@@ -16,12 +16,17 @@ function splitStringIntoArray(str: string, chunkSize: number) {
   }
   return array;
 }
-export type ChatRecordProps = MsgType & { imgUrl?: string };
+export type ChatRecordProps = MsgType;
 const ChatRecord: React.FC<ChatRecordProps> = (props) => {
   const { token } = useToken();
   return (
     <RecordItem isme={props.isMe.toString()} token={token}>
-      <ChatUserAvatar src={props.imgUrl} size={40}></ChatUserAvatar>
+      {/* <ChatUserAvatar src={props.imgUrl} size={40}></ChatUserAvatar> */}
+      {props.avatarImage ? (
+        <ChatUserAvatar size={40} src={props.avatarImage} />
+      ) : (
+        <ChatUserAvatar size={40}>{props.nick_name}</ChatUserAvatar>
+      )}
       <div className="chat-bubble">
         {splitStringIntoArray(props.data, 60).map((item, key) => (
           <p key={key} className="chat-bubble-content">
