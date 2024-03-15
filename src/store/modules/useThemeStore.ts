@@ -1,10 +1,11 @@
-import { theme } from "antd";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-type themeStore={
-    theme:"dark"|"light"|"auto",
-    setTheme:(val:"dark"|"light"|"auto")=>void
-}
+import { persist } from "zustand/middleware";
+
+export type ThemeType = "dark" | "light" | "auto";
+type themeStore = {
+  theme: ThemeType;
+  setTheme: (val: ThemeType) => void;
+};
 const useThemeStore = create<themeStore>()(
   persist(
     (set) => ({

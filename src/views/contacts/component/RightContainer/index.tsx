@@ -7,77 +7,55 @@ import george from "@/assets/georgeh.jpg";
 import ChatRecord from "./ChatRecord";
 import ChatFooter from "./ChatFooter";
 import { ChatListItemData } from "../LeftContainer/ChatList";
-import useSocket from "@/hooks/useSocket";
-import { getMsgListByUser } from "@/service/api";
-import axios from "axios";
-import getUserInfo from "@/utils/getUserInfo";
 const { useToken } = theme;
 
-export type MsgType = {
+type MsgType = {
   isMe: boolean;
   data: string;
-  time?: Date;
 };
 
-// const chat = [
-//   { isMe: true, data: `\n \n 11111111111111` },
-//   { isMe: true, data: "sjdashddwkwlqa" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: true, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   {
-//     isMe: false,
-//     data: "sjdashddkalllllllllllllllllllllllllllllllllllllllllldjkjfhjhjhjjhjhjh  da",
-//   },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashdapO😂" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-//   { isMe: false, data: "sjdashda" },
-// ];
+const chat = [
+  { isMe: true, data: `\n \n 11111111111111` },
+  { isMe: true, data: "sjdashddwkwlqa" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: true, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  {
+    isMe: false,
+    data: "sjdashddkalllllllllllllllllllllllllllllllllllllllllldjkjfhjhjhjjhjhjh  da",
+  },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashdapO😂" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+  { isMe: false, data: "sjdashda" },
+];
 type RightContainerProps = {
   data?: ChatListItemData | null;
 };
 const RightContainer: React.FC<RightContainerProps> = (props) => {
   const { token } = useToken();
-  const io = useSocket();
-  const [chatMessages, setChatMessages] = useState<MsgType[]>([{ data: "", isMe: true }]);
+
+  const [chatMessages, setChatMessages] = useState<MsgType[]>(chat);
+
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const userId = getUserInfo(["id"]);
-    axios.post(getMsgListByUser, { from: userId, to: props.data?.friendID }).then((res) => {
-      const list = res.data.msgList.map((item:any) => {
-        const msg = { data: item.msg, time: item.time };
-        return (item.from === userId ? { ...msg, isMe: true } : { ...msg, isMe: false });
-      });
-      setChatMessages(list);
-    });
-  }, [props.data?.friendID]);
-
-  useEffect(() => {
     if (contentRef.current) contentRef.current.scrollTop = 9999;
-  }, [props.data?.friendID, chatMessages]);
+  }, [props.data?.userId]);
 
-  useEffect(() => {
-    console.log("RightContainer已经Mounted");
-
-    io.on("receive-msg", (msg: MsgType) => {
-      setChatMessages([...chatMessages, msg]);
-    });
-  }, [chatMessages, io]);
   function pushMsg(msg: MsgType) {
     setChatMessages([...chatMessages, msg]);
   }
@@ -98,10 +76,10 @@ const RightContainer: React.FC<RightContainerProps> = (props) => {
               <div className="header-left h-item">
                 <div className="header-userinfo">
                   <span className="user-avatar">
-                    <Avatar src={props.data.avatarImage} size={40} />
+                    <Avatar src={props.data.userAvatar} size={40} />
                   </span>
                   <span className="user-info">
-                    <div className="title">{props.data.remark}</div>
+                    <div className="title">{props.data.title}</div>
                     <div className="status">{props.data.userStatus}</div>
                   </span>
                 </div>
@@ -133,7 +111,7 @@ const RightContainer: React.FC<RightContainerProps> = (props) => {
             </div>
 
             <div className="footer">
-              <ChatFooter {...{ contentRef, pushMsg }} targetUserId={props.data.friendID} />
+              <ChatFooter {...{ contentRef, pushMsg }} />
             </div>
           </div>
         )}
@@ -205,4 +183,4 @@ const Container = styled.div<{ token: GlobalToken }>`
   }
 `;
 
-export default React.memo(RightContainer);
+export default RightContainer;

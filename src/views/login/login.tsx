@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LockOutlined,
   UserOutlined,
@@ -11,14 +11,24 @@ import styled from "styled-components";
 import { IconButton } from "@/components/icons/iconButton";
 import { loginApi } from "@/service/api";
 import { useNavigate } from "react-router-dom";
+import userStore from "@/store/modules/userStore";
 import axios from "axios";
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const setUserId = userStore((state) => state.setUserId);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const account = localStorage.getItem("account-info")
+      ? JSON.parse(localStorage.getItem("account-info")!)
+      : null;
+    if (account) {
+      setUserId(account.id);
+      navigate("/");
+    }
+  });
   const onFinish = (values: unknown) => {
-    console.log(values)
+    console.log(values);
     try {
       setLoading(true);
       axios
@@ -26,6 +36,8 @@ const Login: React.FC = () => {
         .then((res) => {
           if (res.data.status) {
             message.success(`${res.data.msg} Hi,${res.data.user.nick_name}!`);
+            localStorage.setItem("account-info", JSON.stringify(res.data.user));
+            setUserId(res.data.user.id);
             navigate("/");
           } else {
             message.error(res.data.msg);
@@ -38,8 +50,8 @@ const Login: React.FC = () => {
         .finally(() => {
           setLoading(false);
         });
-        //@ts-ignore
-    } catch (e:any) {
+      //@ts-ignore
+    } catch (e: any) {
       console.log("error", e);
       message.error(e);
     }

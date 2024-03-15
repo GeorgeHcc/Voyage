@@ -1,33 +1,33 @@
-import React, { Suspense } from "react";
-import { Switch } from "antd";
-import { CommentOutlined, CustomerServiceOutlined } from '@ant-design/icons';
+import React, { Suspense, useEffect, useState } from "react";
+import { Switch, Flex } from "antd";
 
-import { FloatButton } from 'antd';
 import { MoonFilled, SunFilled } from "@ant-design/icons";
 import useThemeStore from "@/store/modules/useThemeStore";
+
+import { ThemeType } from "@/store/modules/useThemeStore";
 function Setting() {
   const setTheme = useThemeStore((state) => state.setTheme);
+  const localTheme = JSON.parse(localStorage.getItem("theme") || "").state.theme;
+  const [curentTheme, setCurrentTheme] = useState<ThemeType>(localTheme);
+
+  useEffect(() => {
+    setTheme(curentTheme);
+  }, [curentTheme]);
   return (
     <Suspense fallback="loading">
-      <div>
-        夜间模式：
-        <Switch
-          checkedChildren={<MoonFilled />}
-          unCheckedChildren={<SunFilled />}
-          onChange={(checked) => {
-            checked ? setTheme("dark") : setTheme("light");
-          }}
-        />
-      </div>
-      <FloatButton.Group
-      trigger="click"
-      type="primary"
-      style={{ right: 24 }}
-      icon={<CustomerServiceOutlined />}
-    >
-      <FloatButton />
-      <FloatButton icon={<CommentOutlined />} />
-    </FloatButton.Group>
+      <Flex>
+        <div>
+          夜间模式：
+          <Switch
+            checked={curentTheme === "dark"}
+            checkedChildren={<MoonFilled />}
+            unCheckedChildren={<SunFilled />}
+            onChange={(checked) => {
+              checked ? setCurrentTheme("dark") : setCurrentTheme("light");
+            }}
+          />
+        </div>
+      </Flex>
     </Suspense>
   );
 }

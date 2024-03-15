@@ -9,4 +9,4 @@ const LayoutContext = createContext({
   innerSiderWidth: 350,
 } as LayoutContextType);
 
-export { LayoutContext };
+export default LayoutContext ;

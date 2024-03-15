@@ -15,26 +15,26 @@ function App() {
   const lastTheme = JSON.parse(localStorage.getItem("theme")!).state.theme;
 
   return (
-    <SocketProvider>
-      <ConfigProvider
-        theme={{
-          algorithm:
-            lastTheme === "dark"
-              ? theme.darkAlgorithm
-              : curTheme === "dark"
-              ? theme.darkAlgorithm
-              : undefined,
-          token: {
-            colorPrimary: `${purple[4]}`,
-            controlItemBgHover: `${purple[0]}`,
-            colorBgSpotlight: `rgba(0, 0, 0, 0.75)`,
-            controlOutlineWidth: 5,
-          },
-        }}
-      >
-        <MainLayout>{useRoutes(routes)}</MainLayout>
-      </ConfigProvider>
-    </SocketProvider>
+    <ConfigProvider
+      theme={{
+        algorithm:
+          lastTheme === "dark"
+            ? theme.darkAlgorithm
+            : curTheme === "dark"
+            ? theme.darkAlgorithm
+            : undefined,
+        token: {
+          colorPrimary: `${purple[4]}`,
+          // controlItemBgHover: `${purple[0]}`,
+          colorBgSpotlight: `rgba(0, 0, 0, 0.75)`,
+          controlOutlineWidth: 5,
+        },
+      }}
+    >
+      <SocketProvider>
+        <MainLayout>{useRoutes(routes)}</MainLayout>{" "}
+      </SocketProvider>
+    </ConfigProvider>
   );
 }
 

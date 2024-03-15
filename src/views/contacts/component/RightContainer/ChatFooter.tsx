@@ -7,17 +7,16 @@ import { IconButton } from "@/components/icons/iconButton";
 import { EmojiOutlined } from "@/components/icons/iconFont";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import useSocket from "@/hooks/useSocket";
-import getUserInfo from "@/utils/getUserInfo";
-import { MsgType } from ".";
 const { useToken } = theme;
-
+// import useSocket from "@/hooks/useSocket";
 const { TextArea } = Input;
 
-
+type MsgType = {
+  isMe: boolean;
+  data: string;
+};
 export type ChatFooterProps = {
   contentRef: RefObject<HTMLDivElement>;
-  targetUserId: string | number;
   pushMsg: (msg: MsgType) => void;
 };
 const ChatFooter: React.FC<ChatFooterProps> = (props) => {
@@ -27,14 +26,13 @@ const ChatFooter: React.FC<ChatFooterProps> = (props) => {
   const [openPopover, setOpenPopover] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const io = useSocket();
   const { token } = useToken();
   function sendMessage(msg: string) {
     if (msg.trim().length > 0) {
       props.pushMsg({ data: inputingData!, isMe: true });
-      setOpenEmoji(false); //关闭Emoji弹框
+      setOpenEmoji(false);
       setInputingData("");
-      io.emit("send-msg", { senderId: getUserInfo(["id"]), targetUserId: props.targetUserId, msg });
+
       queueMicrotask(() => {
         props.contentRef.current!.scrollTop = 9999; //滚动到底部
       });

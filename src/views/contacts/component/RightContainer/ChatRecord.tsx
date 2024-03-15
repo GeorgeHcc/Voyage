@@ -3,7 +3,11 @@ import styled, { css } from "styled-components";
 import { purple } from "@ant-design/colors";
 import { Avatar, GlobalToken, theme } from "antd";
 const { useToken } = theme;
-import { MsgType } from ".";
+type ChatRecordProps = {
+  data: string;
+  imgUrl: string;
+  isMe: boolean;
+};
 
 function splitStringIntoArray(str: string, chunkSize: number) {
   const array = [];
@@ -16,14 +20,14 @@ function splitStringIntoArray(str: string, chunkSize: number) {
   }
   return array;
 }
-export type ChatRecordProps = MsgType & { imgUrl?: string };
+
 const ChatRecord: React.FC<ChatRecordProps> = (props) => {
   const { token } = useToken();
   return (
-    <RecordItem isme={props.isMe.toString()} token={token}>
+    <RecordItem isme={props.isMe} token={token}>
       <ChatUserAvatar src={props.imgUrl} size={40}></ChatUserAvatar>
       <div className="chat-bubble">
-        {splitStringIntoArray(props.data, 60).map((item, key) => (
+        {splitStringIntoArray(props.data, 30).map((item, key) => (
           <p key={key} className="chat-bubble-content">
             {item}
           </p>
@@ -39,7 +43,7 @@ const ChatUserAvatar = styled(Avatar)`
   margin-top: 10px;
 `;
 
-type P = { isme: string; token: GlobalToken };
+type P = { isme: boolean; token: GlobalToken };
 
 const RecordItem = styled.div<P>`
   /* width: 100%; */
@@ -48,7 +52,7 @@ const RecordItem = styled.div<P>`
   margin: 20px;
   display: flex;
   ${(p) =>
-    p.isme === "true"
+    p.isme
       ? css`
           flex-direction: row-reverse;
         `
@@ -64,7 +68,7 @@ const RecordItem = styled.div<P>`
     margin: 10px;
 
     ${(p) =>
-      p.isme !== "true"
+      !p.isme
         ? `background-color:${p.token.colorBgElevated};`
         : css`
             background-color: ${purple[3]};
@@ -73,16 +77,16 @@ const RecordItem = styled.div<P>`
     &::before {
       content: "";
       position: absolute;
-      left: ${(p) => (p.isme=== "true" ? "none;" : "-6px;")};
-      right: ${(p) => (p.isme=== "true" ? "-6px;" : "none;")};
+      left: ${(p) => (p.isme ? "none;" : "-6px;")};
+      right: ${(p) => (p.isme ? "-6px;" : "none;")};
       top: 10px;
       width: 0;
       height: 0;
       border-top: 7px solid transparent;
       border-bottom: 7px solid transparent;
       border-width: 7px;
-      border-left: ${(p) => (p.isme=== "true" ? `7px solid ${purple[3]};` : "none;")};
-      border-right: ${(p) => (p.isme=== "true" ? "none;" : `7px solid ${p.token.colorBgElevated};`)};
+      border-left: ${(p) => (p.isme ? `7px solid ${purple[3]};` : "none;")};
+      border-right: ${(p) => (p.isme ? "none;" : `7px solid ${p.token.colorBgElevated};`)};
     }
     &-content {
       margin: 0px;

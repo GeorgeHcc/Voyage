@@ -1,24 +1,22 @@
 import React, { Suspense, useState } from "react";
 import { Layout } from "antd";
 import styled from "styled-components";
-
 import RightContainer from "./component/RightContainer";
 import LeftContainer from "./component/LeftContainer";
 import { ChatListItemData } from "./component/LeftContainer/ChatList";
+
 const { Sider, Content } = Layout;
+
+
 const Messages: React.FC = () => {
-  // const contentData: RightContainerProps = {
-  //   receiverId: "user001",
-  //   receiverAvatarUrl: george,
-  //   receiverName: "George H",
-  //   reciverStatus: "在线",
-  // };
 
   const sessionChatData = sessionStorage.getItem("current-chat-data")
     ? JSON.parse(sessionStorage.getItem("current-chat-data")!)
     : null;
   const [data, setData] = useState<ChatListItemData | null>(sessionChatData);
 
+
+  //更新选中的好友聊天data并缓存到session，用于切换页面保活
   const setAndCacheData = (selectedVal: ChatListItemData) => {
     sessionStorage.setItem("current-chat-data", JSON.stringify(selectedVal));
     setData(selectedVal);

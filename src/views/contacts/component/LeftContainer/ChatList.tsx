@@ -1,12 +1,13 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { Avatar, Dropdown, theme, GlobalToken, Badge } from "antd";
+import { purple } from "@ant-design/colors";
 import type { MenuProps } from "antd";
 const { useToken } = theme;
 
 export interface ChatListItemData {
-  userId: string;
-  userStatus?: boolean;
+  userId: string | number;
+  userStatus?: string;
   userAvatar?: string;
   title?: string;
   lastMsg?: string;
@@ -56,7 +57,7 @@ const ChatList: React.FC<ChatListProps> = ({ data, onSelected }) => {
             }}
           >
             <div className="left">
-              <Badge count={index}>
+              <Badge count={index} size="small">
                 <Avatar size={40} shape="square" src={item.userAvatar} />
               </Badge>
 
@@ -79,18 +80,21 @@ const ChatList: React.FC<ChatListProps> = ({ data, onSelected }) => {
 const ChatListContainer = styled.ul<{ token: GlobalToken }>`
   flex-grow: 1;
   overflow-y: scroll;
-  padding: 0;
+  padding: 0 5px;
   margin: 0;
   color: ${(t) => t.token.colorTextHeading};
   background-color: ${(t) => t.token.colorBgContainer};
   & .list-item {
-    padding: 5px 10px;
+    padding: 0px 10px;
     display: flex;
+    align-items: center;
+    border-radius: 8px;
     &:hover {
       background-color: ${(t) => t.token.colorBgTextHover};
     }
     &.selected {
       background-color: ${(t) => t.token.colorBgTextActive};
+      /* ${purple[3]}; */
     }
     & .left {
       padding: 10px 0;
@@ -100,13 +104,17 @@ const ChatListContainer = styled.ul<{ token: GlobalToken }>`
       flex: 1;
 
       & .chat-info {
+        height: 50px;
         margin: 0 10px;
+        padding: 2px 0 2px 0;
         & .chat-title {
+          font-weight: 600;
           margin: 0;
         }
         & .chat-last-msg {
-          font-size: 0.8rem;
-          margin: 0;
+          font-size: 0.75rem;
+          margin-bottom: 0;
+          margin-top: 5px;
           color: ${(t) => t.token.colorTextDescription};
         }
       }

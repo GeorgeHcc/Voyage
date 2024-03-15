@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Button, Input, Dropdown, theme, message, Modal } from "antd";
+import React, { useState } from "react";
+import { Button, Input, Dropdown, theme, message ,Modal} from "antd";
 import type { GlobalToken, MenuProps } from "antd";
 import styled from "styled-components";
 import ChatList from "./ChatList";
 import { ChatListItemData } from "./ChatList";
-import getUserInfo from "@/utils/getUserInfo";
-import axios from "axios";
-import { getFriendsList } from "@/service/api";
+import george from "@/assets/georgeh.jpg";
 import {
   SearchOutlined,
   PlusOutlined,
@@ -22,35 +20,26 @@ const items: MenuProps["items"] = [
 ];
 const { useToken } = theme;
 
-// const data: ChatListItemData[] = Array.from({ length: 30 }, (_, i) => ({
-//   userId: i,
-//   userAvatar: george,
-//   title: `Geroge H ${i + 1}`,
-//   lastMsg: "你好啊",
-//   lastTime: "昨天",
-//   userStatus: "在线",
-// }));
+const data: ChatListItemData[] = Array.from({ length: 30 }, (_, i) => ({
+  userId: i,
+  userAvatar: george,
+  title: `Geroge H ${i + 1}`,
+  lastMsg: "你好啊",
+  lastTime: "昨天",
+  userStatus: "在线",
+}));
 
 export type LeftContainerProps = {
   userSelectedChange: (userData: any) => void;
 };
 
 const LeftContainer: React.FC<LeftContainerProps> = ({ userSelectedChange }) => {
-  const { token } = useToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [firendsList, setFirendsList] = useState<ChatListItemData[]|null>(null);
-
+  const { token } = useToken();
   const handleClick: MenuProps["onClick"] = ({ key }) => {
     setIsModalOpen(true);
     message.info(`Click on item ${key}`);
   };
-
-  useEffect(() => {
-    const userId = getUserInfo(["id"]);
-    axios.get(`${getFriendsList}/${userId}`).then((res) => {
-      setFirendsList(res.data.friendList);
-    });
-  }, []);
   return (
     <Container token={token}>
       <div className="header">
@@ -62,14 +51,10 @@ const LeftContainer: React.FC<LeftContainerProps> = ({ userSelectedChange }) => 
           suffix={"(ctrl+k)"}
           onChange={(e) => console.log(e.target.value)}
         />
-        <Dropdown menu={{ items, onClick: handleClick }} trigger={["click"]}>
-          <Button shape="circle" onClick={() => {}}>
-            <PlusOutlined />
-          </Button>
-        </Dropdown>
+       
       </div>
       <ChatList
-        data={firendsList}
+        data={data}
         onSelected={(seletedVal: ChatListItemData) => userSelectedChange(seletedVal)}
       ></ChatList>
       <Modal
@@ -99,9 +84,7 @@ const Container = styled.div<{ token: GlobalToken }>`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    & > span {
-      width: 250px;
-    }
+   
     & .ant-input-suffix {
       color: ${(t) => t.token.colorTextDescription};
     }
