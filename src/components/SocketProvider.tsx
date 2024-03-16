@@ -10,7 +10,7 @@ import SocketContext from "@/context/socketContext";
 const SocketProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const socket = io(import.meta.env.VITE_SOCKET_URL);
   useEffect(() => {
-    socket.emit("connection");
+    // socket.emit("connect");
     socket.emit("online", getUserInfo(["id"]));
     socket.connect() && console.log("socket 已连接");
     return () => {

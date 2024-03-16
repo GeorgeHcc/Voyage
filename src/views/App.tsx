@@ -6,7 +6,7 @@ import { useRoutes } from "react-router-dom";
 import { ConfigProvider, theme } from "antd";
 import { purple } from "@ant-design/colors";
 import MainLayout from "../layout/mainLayout";
-import SocketProvider from "@/components/SocketProvider";
+
 import useThemeStore from "@/store/modules/useThemeStore";
 
 function App() {
@@ -31,9 +31,7 @@ function App() {
         },
       }}
     >
-      <SocketProvider>
-        <MainLayout>{useRoutes(routes)}</MainLayout>{" "}
-      </SocketProvider>
+      <MainLayout>{useRoutes(routes)}</MainLayout>{" "}
     </ConfigProvider>
   );
 }

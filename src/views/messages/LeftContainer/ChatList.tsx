@@ -41,7 +41,8 @@ const items: MenuProps["items"] = [
 ];
 const ChatList: React.FC<ChatListProps> = ({ data, onSelected }) => {
   const { token } = useToken();
-  const [selectItem, setSelectedItem] = useState<string | number>();
+  const { friendId } = JSON.parse(sessionStorage.getItem("current-chat-data")!);
+  const [selectItem, setSelectedItem] = useState<string | number>(friendId);
 
   const listRef = useRef<HTMLLIElement | null>(null);
 
@@ -51,11 +52,11 @@ const ChatList: React.FC<ChatListProps> = ({ data, onSelected }) => {
       {data?.map((item, index) => (
         <Dropdown menu={{ items }} trigger={["contextMenu"]} key={index}>
           <li
-            className={`list-item ${index === selectItem && "selected"}`}
-            key={index}
+            className={`list-item ${item.friendID === selectItem && "selected"}`}
+            key={item.friendID}
             ref={listRef}
             onClick={() => {
-              setSelectedItem(index);
+              setSelectedItem(item.friendID);
               onSelected(item);
             }}
           >

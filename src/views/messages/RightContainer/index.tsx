@@ -19,7 +19,7 @@ export type MsgType = {
   time?: Date;
   avatarImage?: string;
   nick_name?: string;
-  group_nick_name?:string;
+  group_nick_name?: string;
 };
 
 // const chat = [
@@ -132,8 +132,10 @@ const RightContainer: React.FC<RightContainerProps> = (props) => {
                     <ChatRecord
                       key={`${index}`}
                       isMe={item.isMe}
-                      avatarImage={item.isMe?george: item.avatarImage}
-                      nick_name={item.nick_name}
+                      avatarImage={
+                        item.isMe ? getUserInfo(["avatarImage"]) : props.data?.avatarImage
+                      }
+                      nick_name={item.isMe ? getUserInfo(["nick_name"]) : props.data?.nick_name}
                       data={item.data}
                     ></ChatRecord>
                   );
