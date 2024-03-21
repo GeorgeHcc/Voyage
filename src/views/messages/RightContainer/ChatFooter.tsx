@@ -14,7 +14,6 @@ const { useToken } = theme;
 
 const { TextArea } = Input;
 
-
 export type ChatFooterProps = {
   contentRef: RefObject<HTMLDivElement>;
   targetUserId: string | number;
@@ -108,7 +107,8 @@ const ChatFooter: React.FC<ChatFooterProps> = (props) => {
 const Container = styled.div<{ token: GlobalToken }>`
   width: 100%;
   background-color: ${(t) => t.token.colorBgContainer};
-
+  min-height: 72px;
+  max-height: 182px;
   display: flex;
   gap: 25px;
   align-items: center;

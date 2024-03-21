@@ -1,6 +1,8 @@
-import React from "react";
+import React, { startTransition } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AccountSetting() {
+  const navigate = useNavigate();
   return (
     <div>
       <section>
@@ -19,11 +21,23 @@ function AccountSetting() {
         <p>设置手机号</p>
         <p>绑定其他三方账号</p>
         <p>更改邮箱</p>
+        <p
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            localStorage.removeItem("account-info");
+            sessionStorage.removeItem("current-chat-data");
+            startTransition(() => {
+              navigate("/login");
+            });
+          }}
+        >
+          退出登录
+        </p>
       </section>
 
       <section>
         <strong>安全设置</strong>
-        
+
         <p>修改密码</p>
         <p>多重验证</p>
       </section>

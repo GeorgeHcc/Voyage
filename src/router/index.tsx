@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 import { Navigate, RouteObject } from "react-router-dom";
-
+import NewContact from "@/views/contacts/newContact";
+import Group from "@/views/contacts/group";
 const Login = lazy(() => import("../views/login/login"));
 const Register = lazy(() => import("../views/login/register"));
 const Meeting = lazy(() => import("@/views/meeting"));
@@ -11,7 +12,7 @@ const AccountSetting = lazy(() => import("@/views/setting/account"));
 const SystemSetting = lazy(() => import("@/views/setting/system"));
 const OtherSetting = lazy(() => import("@/views/setting/other"));
 const NotFoundPage = lazy(() => import("@/views/notFoundPage"));
-
+import Legacy from "@/views/meeting/legacy";
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -35,16 +36,24 @@ const routes: RouteObject[] = [
     element: <Meeting />,
   },
   {
+    path: "/legacy",
+    element: <Legacy />,
+  },
+  {
     path: "/contacts",
     element: <Contacts />,
+    children: [
+      { path: "new", element: <NewContact /> },
+      { path: "group", element: <Group /> },
+    ],
   },
   {
     path: "/setting",
     element: <Setting />,
     children: [
-      { path: "/setting/account", element: <AccountSetting /> },
-      { path: "/setting/system", element: <SystemSetting /> },
-      { path: "/setting/other", element: <OtherSetting /> },
+      { path: "account", element: <AccountSetting />, index: true },
+      { path: "system", element: <SystemSetting /> },
+      { path: "other", element: <OtherSetting /> },
     ],
   },
   {

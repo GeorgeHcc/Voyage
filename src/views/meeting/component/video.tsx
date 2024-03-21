@@ -1,6 +1,6 @@
 import React, { forwardRef, LegacyRef, useEffect, useRef } from "react";
 import VideoWrap from "../style/videoStyl";
-import { useAppSelector } from "@/redux";
+
 export interface IVideoProps {
   width: string | number;
   height: string | number;

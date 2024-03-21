@@ -1,15 +1,14 @@
-// import { SpeakerLayou } from "./layout/speakerLayout";
-// import { DefaultLayout } from "./layout/defaultLayout";
 import routes from "../router";
-// import GlobalStyl from "./style/theme";
 import { useRoutes } from "react-router-dom";
 import { ConfigProvider, theme } from "antd";
 import { purple } from "@ant-design/colors";
 import MainLayout from "../layout/mainLayout";
-
 import useThemeStore from "@/store/modules/useThemeStore";
+import { enableMapSet } from "immer";
+enableMapSet();
 
 function App() {
+
   const curTheme = useThemeStore((state) => state.theme);
 
   const lastTheme = JSON.parse(localStorage.getItem("theme")!).state.theme;
@@ -31,7 +30,8 @@ function App() {
         },
       }}
     >
-      <MainLayout>{useRoutes(routes)}</MainLayout>{" "}
+      {useRoutes(routes)}
+      {/* <MainLayout>{useRoutes(routes)}</MainLayout> */}
     </ConfigProvider>
   );
 }

@@ -1,80 +1,70 @@
-import React, { Suspense, useEffect, useRef } from "react";
-import { DefaultLayout } from "@/layout/defaultLayout";
-import Video from "./component/video";
-import BottomToolBar from "./component/bottomToolBar";
-import { AppDispatch, useAppSelector } from "@/redux";
-import { removeConnection, addPeerConnection } from "@/redux/modules/peerConnetion";
-import { useDispatch } from "react-redux";
-import { Dispatch } from "@reduxjs/toolkit";
-import { getLocalDevices } from "@/utils";
+import React, { Suspense, useState } from "react";
+import { createFromIconfontCN, UpOutlined, DownOutlined } from "@ant-design/icons";
+
 import styled from "styled-components";
-import useP2PConnection from "@/hooks/useP2PConnection";
-import { GlobalToken, message, theme, Button } from "antd";
+import JoinMeeting from "./joinMeeting";
+import { GlobalToken, theme, Button, Flex, Dropdown, ConfigProvider, Divider, message } from "antd";
+import MainLayout from "@/layout/mainLayout";
+// const IconFont = createFromIconfontCN({
+//   scriptUrl: ["//at.alicdn.com/t/c/font_4432684_dk043ihaok7.js"],
+//   extraCommonProps: {
+//     style: {
+//       fontSize: "20px",
+//     },
+//   },
+// });
+
+// enum Icon {
+//   AudioOff = "icon-audio-off-light",
+//   AudioOn = "icon-audio-fill-light",
+//   VideoOff = "icon-icon-video-off-light",
+//   VideoOn = "icon-video-light",
+// }
 
 const { useToken } = theme;
 
 const Meeting: React.FC = () => {
   const { token } = useToken();
-  const videoRef = useRef(null);
-  const { video, audio } = useAppSelector((state) => {
-    return state.accountReducer.meetingState;
-  });
+  const [joinMeetingOpen, setJoinMeetingOpen] = useState(false);
 
-  console.log(video, audio);
-  const [messageApi, contextHolder] = message.useMessage();
-  const { devices } = useP2PConnection(
-    {
-      constraints: {
-        audio: audio,
-        video: video,
-      },
-      mountDom: videoRef,
-    },
-    (e) => {
-      messageApi.open({
-        type: "error",
-        content: `${e}`,
-      });
-    }
-  );
-  console.log(devices);
-  const Main = (
-    <DefaultLayout
-      header={<div style={{ height: "100%", backgroundColor: "white" }}>header</div>}
-      footer={<BottomToolBar />}
-      content={<Video width={"100%"} height={"100%"} ref={videoRef} reverse></Video>}
-    ></DefaultLayout>
-  );
   return (
     <>
-      {contextHolder}
       <Suspense fallback="loading">
-        <Container token={token}>
-          <div className="meeting-wrap">
-            <div className="content">
-              <p className="title">流畅可协同的视频会议</p>
+        <MainLayout>
+          <Container token={token}>
+            <div className="meeting-wrap">
+              <div className="content">
+                <p className="title">流畅可协同的视频会议</p>
 
-              <Button type="primary" size="large" className="btn">
-                发起新会议
-              </Button>
-              <Button size="large" className="btn">
-                加入会议
-              </Button>
-              {/* <div className="bottom"> */}
-              <div className="gap">
-                <span className="gap-line"></span>
-                <span className="gap-text">或</span>
-                <span className="gap-line"></span>
-              </div>
-              <div className="some-info">
-                <p>
-                  已安装Voyage客户端？ <a href="#">打开</a>
-                </p>
+                <Button type="primary" size="large" className="btn">
+                  发起新会议
+                </Button>
+                <Button size="large" className="btn" onClick={() => setJoinMeetingOpen(true)}>
+                  加入会议
+                </Button>
+
+                <div className="gap">
+                  <span className="gap-line"></span>
+                  <span className="gap-text">或</span>
+                  <span className="gap-line"></span>
+                </div>
+                <div className="some-info">
+                  <p>
+                    已安装Voyage客户端？ <a href="#">打开</a>
+                  </p>
+                </div>
               </div>
             </div>
-            {/* </div> */}
-          </div>
-        </Container>
+          </Container>
+        </MainLayout>
+        <JoinMeeting
+          open={joinMeetingOpen}
+          // title="加入会议"
+          close={() => {
+            setJoinMeetingOpen(false);
+            message.info(1111);
+          }}
+        />
       </Suspense>
     </>
   );

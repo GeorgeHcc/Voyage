@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import {
   LockOutlined,
   UserOutlined,
@@ -10,7 +10,7 @@ import { Button, Checkbox, Form, Input, theme, Avatar, Card, ConfigProvider, mes
 import styled from "styled-components";
 import { IconButton } from "@/components/icons/iconButton";
 import { loginApi } from "@/service/api";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import userStore from "@/store/modules/userStore";
 import axios from "axios";
 
@@ -136,7 +136,16 @@ const Login: React.FC = () => {
                   <IconButton icon={<TikTokOutlined />} />
                 </span>
                 <span className="login-form-rigster">
-                  no account? <a href="">sign up</a>
+                  no account?{" "}
+                  <a
+                    onClick={() => {
+                      startTransition(() => {
+                        navigate("/register");
+                      });
+                    }}
+                  >
+                    sign up
+                  </a>
                 </span>
               </div>
             </Form>

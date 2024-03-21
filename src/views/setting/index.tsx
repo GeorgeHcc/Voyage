@@ -2,6 +2,7 @@ import { Layout, GlobalToken, theme } from "antd";
 import styled from "styled-components";
 import React, { Suspense, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import MainLayout from "@/layout/mainLayout";
 const { Sider, Content } = Layout;
 
 const { useToken } = theme;
@@ -11,36 +12,38 @@ const settingOptions: { label: string; path: string }[] = [
   { label: "其他设置", path: "/setting/other" },
 ];
 const Setting: React.FC = () => {
-  const [selectItem, setSelectedItem] = useState<string | number>();
+  const [selectItem, setSelectedItem] = useState<string | number>(0);
   const { token } = useToken();
 
   return (
     <Suspense fallback={"load"}>
-      <Container token={token}>
-        <InnerSider width={300}>
-          <ul className="setting-options">
-            {settingOptions.map((item, index) => (
-              <NavLink to={item.path}>
-                <li
-                  key={item.path}
-                  className={`setting-item ${index === selectItem && "selected"}`}
-                  onClick={() => {
-                    setSelectedItem(index);
-                  }}
-                >
-                  <div>{item.label}</div>
-                </li>
-              </NavLink>
-            ))}
-          </ul>
-        </InnerSider>
-        <Content className="content">
-          <Resizer />
-          {/* <Flex> */}
-          <Outlet />
-          {/* </Flex> */}
-        </Content>
-      </Container>
+      <MainLayout>
+        <Container token={token}>
+          <InnerSider width={300}>
+            <ul className="setting-options">
+              {settingOptions.map((item, index) => (
+                <NavLink to={item.path}>
+                  <li
+                    key={item.path}
+                    className={`setting-item ${index === selectItem && "selected"}`}
+                    onClick={() => {
+                      setSelectedItem(index);
+                    }}
+                  >
+                    <div>{item.label}</div>
+                  </li>
+                </NavLink>
+              ))}
+            </ul>
+          </InnerSider>
+          <Content className="content">
+            <Resizer />
+            {/* <Flex> */}
+            <Outlet />
+            {/* </Flex> */}
+          </Content>
+        </Container>
+      </MainLayout>
     </Suspense>
   );
 };
@@ -84,7 +87,7 @@ const InnerSider = styled(Sider)`
   background-color: transparent !important;
   height: 100%;
 `;
-const MainContent = styled(Content)``;
+
 
 const Resizer = styled.div`
   display: inline-block !important;
